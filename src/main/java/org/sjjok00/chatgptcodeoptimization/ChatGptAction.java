@@ -6,25 +6,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.NlsContexts;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.util.PsiUtilCore;
 import okhttp3.*;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -43,7 +37,7 @@ public class ChatGptAction extends AnAction {
 
     private static final String ROLE_SYSTEM = "system";
     private static final String ROLE_USER = "user";
-    private static final OkHttpClient client = new OkHttpClient.Builder().proxy(proxy).callTimeout(30, TimeUnit.SECONDS).build();
+    private static final OkHttpClient client = new OkHttpClient.Builder().callTimeout(30, TimeUnit.SECONDS).proxy(proxy).build();
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
@@ -75,11 +69,12 @@ public class ChatGptAction extends AnAction {
             return;
         }
 
-        ProgressManager.getInstance().runProcess(() -> replaceSelectedCode(editor, optimizedCode), new EmptyProgressIndicator());
+        replaceSelectedCode(editor, optimizedCode);
     }
 
     /**
      * ChatGPT
+     *
      * @param code
      * @return
      */
@@ -199,135 +194,6 @@ public class ChatGptAction extends AnAction {
         public Message(String content) {
             this.role = ROLE_USER;
             this.content = content;
-        }
-    }
-
-
-    private static class EmptyProgressIndicator implements ProgressIndicator {
-        @Override
-        public void start() {}
-
-        @Override
-        public void stop() {}
-
-        @Override
-        public boolean isRunning() {
-            return false;
-        }
-
-        @Override
-        public void setFraction(double fraction) {}
-
-        /**
-         * Stores {@link #getText()}, {@link #getText2()}, {@link #isIndeterminate()} and {@link #getFraction()} to the temporary stack,
-         * to be restored later via {@link #popState()}.
-         */
-        @Override
-        public void pushState() {
-
-        }
-
-        /**
-         * Restores {@link #getText()}, {@link #getText2()}, {@link #isIndeterminate()} and {@link #getFraction()} from the temporary stack,
-         * stored earlier by {@link #pushState()}
-         */
-        @Override
-        public void popState() {
-
-        }
-
-        /**
-         * @return whether this process blocks user activities while active, probably displaying a modal dialog.
-         * @see #setModalityProgress(ProgressIndicator)
-         */
-        @Override
-        public boolean isModal() {
-            return false;
-        }
-
-        /**
-         * Returns the modality state returned by {@link ModalityState#defaultModalityState()} on threads associated with this progress.
-         * By default, depending on implementation, it's {@link ModalityState#NON_MODAL} or current modality at the moment of progress indicator creation.
-         * It can be later modified by {@link #setModalityProgress(ProgressIndicator)}, but it mostly makes sense for processes showing modal dialogs.
-         */
-        @Override
-        public @NotNull ModalityState getModalityState() {
-            return null;
-        }
-
-        /**
-         * In many implementations, grants to this progress indicator its own modality state.
-         * Don't call unless you know what you're doing.
-         * Passing a non-null value can make this indicator modal (as in {@link #isModal()}), which, if not accompanied by showing a modal dialog,
-         * might affect the whole IDE adversely: e.g. actions won't be executed, editor typing won't work, and all that with no visible indication.
-         *
-         * @param modalityProgress
-         */
-        @Override
-        public void setModalityProgress(@Nullable ProgressIndicator modalityProgress) {
-
-        }
-
-        /**
-         * Returns {@code true} when this progress is indeterminate and displays no fractions, {@code false} otherwise.
-         */
-        @Override
-        public boolean isIndeterminate() {
-            return false;
-        }
-
-        @Override
-        public void setText(String text) {}
-
-        /**
-         * Returns text above the progress bar, set by {@link #setText(String)}.
-         */
-        @Override
-        public @NlsContexts.ProgressText String getText() {
-            return null;
-        }
-
-        @Override
-        public void setText2(String text) {}
-
-        /**
-         * Returns text under the progress bar, set by {@link #setText2(String)}.
-         */
-        @Override
-        public @NlsContexts.ProgressDetails String getText2() {
-            return null;
-        }
-
-        /**
-         * Returns current fraction, set by {@link #setFraction(double)}.
-         */
-        @Override
-        public double getFraction() {
-            return 0;
-        }
-
-        @Override
-        public void setIndeterminate(boolean indeterminate) {}
-
-        @Override
-        public void cancel() {}
-
-        @Override
-        public boolean isCanceled() {
-            return false;
-        }
-
-        @Override
-        public void checkCanceled() {}
-
-        @Override
-        public boolean isPopupWasShown() {
-            return false;
-        }
-
-        @Override
-        public boolean isShowing() {
-            return false;
         }
     }
 }
