@@ -1,0 +1,40 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>org.sjjok00.ChatGPTCodeOptimization</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>ChatGPT Code Optimization</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor email="sjjok00@gmail.com">sjjok00</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description><![CDATA[
+    A plugin to optimize code using ChatGPT.<br>
+    <!-- <em></em> -->
+  ]]></description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationConfigurable
+                displayName="ChatGPT Code Optimization"
+                instance="org.sjjok00.chatgptcodeoptimization.ChatGptConfigurable"
+                id="org.sjjok00.chatgptcodeoptimization.ChatGptConfigurable"
+        />
+    </extensions>
+    <actions>
+        <action id="OptimizeCode" class="org.sjjok00.chatgptcodeoptimization.ChatGptAction" text="Optimize Code" description="Use ChatGPT to optimize selected code.">
+            <add-to-group group-id="EditorLangPopupMenu" anchor="first"/>
+<!--            <keyboard-shortcut keymap="$default" first-keystroke="alt u"/>-->
+        </action>
+    </actions>
+</idea-plugin>
