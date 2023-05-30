@@ -66,8 +66,7 @@ public class ChatGptAction extends AnAction {
         try {
             optimizedCode = optimizeCode(selectedCode);
         } catch (Exception e) {
-            JSONObject o = JSON.parseObject(e.getMessage());
-            Messages.showErrorDialog(o.getJSONObject("error").getString("message"), "Optimization Error");
+            Messages.showErrorDialog(e.getMessage(), "Optimization Error");
             return;
         }
 
@@ -115,7 +114,7 @@ public class ChatGptAction extends AnAction {
 
             JSONObject json = JSON.parseObject(responseBody);
             if (!json.containsKey("choices")) {
-                throw new RuntimeException(json.toString());
+                throw new RuntimeException(json.getJSONObject("error").getString("message"));
             }
             JSONArray choices = json.getJSONArray("choices");
 
