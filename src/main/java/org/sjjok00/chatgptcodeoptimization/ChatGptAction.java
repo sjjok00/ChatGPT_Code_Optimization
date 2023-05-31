@@ -37,7 +37,7 @@ public class ChatGptAction extends AnAction {
 
     private static final String ROLE_SYSTEM = "system";
     private static final String ROLE_USER = "user";
-    private static final OkHttpClient client = new OkHttpClient.Builder().callTimeout(30, TimeUnit.SECONDS).proxy(proxy).build();
+    private static final OkHttpClient client = new OkHttpClient.Builder().callTimeout(30, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS).proxy(proxy).build();
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
