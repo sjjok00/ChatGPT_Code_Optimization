@@ -11,6 +11,7 @@ import java.awt.*;
 public class ChatGptConfigurable implements Configurable {
 
     private JTextField openAiApiKeyTextField;
+    private JTextField overrideEndpointTextField;
     private JPanel mainPanel;
 
     @Nls
@@ -41,9 +42,21 @@ public class ChatGptConfigurable implements Configurable {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         mainPanel.add(openAiApiKeyTextField, gbc);
 
-        // 添加一个占位的空组件，填满剩余的空间
+        JLabel endpointLabel = new JLabel("Override Api Endpoint:");
         gbc.gridx = 0;
         gbc.gridy = 1;
+        mainPanel.add(endpointLabel, gbc);
+
+        overrideEndpointTextField = new JTextField();
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        mainPanel.add(overrideEndpointTextField, gbc);
+
+        // 添加一个占位的空组件，填满剩余的空间
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         gbc.weightx = 0;
         gbc.weighty = 1.0;
         gbc.fill = 1;
@@ -57,14 +70,19 @@ public class ChatGptConfigurable implements Configurable {
         // 检查配置是否被修改
         String savedOpenAiApiKey = ChatGptSettings.getInstance().getOpenAiApiKey();
         String currentOpenAiApiKey = openAiApiKeyTextField.getText();
-        return !savedOpenAiApiKey.equals(currentOpenAiApiKey);
+
+        String savedOverrideEndpoint = ChatGptSettings.getInstance().getOverrideEndpoint();
+        String currentOverrideEndpoint = overrideEndpointTextField.getText();
+        return !savedOpenAiApiKey.equals(currentOpenAiApiKey) || !savedOverrideEndpoint.equals(currentOverrideEndpoint);
     }
 
     @Override
     public void apply() throws ConfigurationException {
         // 将配置参数保存起来
         String openAiApiKey = openAiApiKeyTextField.getText();
+        String overrideEndpoint = overrideEndpointTextField.getText();
         ChatGptSettings.getInstance().setOpenAiApiKey(openAiApiKey);
+        ChatGptSettings.getInstance().setOverrideEndpoint(overrideEndpoint);
     }
 
     @Override
@@ -72,5 +90,7 @@ public class ChatGptConfigurable implements Configurable {
         // 重置配置参数为保存的值
         String openAiApiKey = ChatGptSettings.getInstance().getOpenAiApiKey();
         openAiApiKeyTextField.setText(openAiApiKey);
+        String overrideEndpoint = ChatGptSettings.getInstance().getOverrideEndpoint();
+        overrideEndpointTextField.setText(overrideEndpoint);
     }
 }

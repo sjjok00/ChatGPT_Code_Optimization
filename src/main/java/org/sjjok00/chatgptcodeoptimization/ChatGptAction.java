@@ -96,8 +96,13 @@ public class ChatGptAction extends AnAction {
             throw new RuntimeException("Please config OpenAI API Key in 'Setting > ChatGPT Code Optimization' first.");
         }
 
+        String endpoint = ChatGptSettings.getInstance().getOverrideEndpoint();
+        if (StringUtils.isBlank(endpoint)) {
+            endpoint = OPENAI_API_ENDPOINT;
+        }
+
         Request request = new Request.Builder()
-                .url(OPENAI_API_ENDPOINT)
+                .url(endpoint)
                 .header("Authorization", "Bearer " + openAiApiKey)
                 .post(body)
                 .build();
@@ -121,10 +126,10 @@ public class ChatGptAction extends AnAction {
             System.out.println(result);
             String text = result.getJSONObject("message").getString("content");
             if (StringUtils.isNotBlank(text)) {
-                text = text.split("```")[1];
-                if (text.startsWith("java\\n")) {
-                    text = text.replaceFirst("java\\n", "");
+                if (text.contains("```java")) {
+                    text = text.replaceFirst("```java", "```");
                 }
+                text = text.split("```")[1];
             }
             return text.trim();
 

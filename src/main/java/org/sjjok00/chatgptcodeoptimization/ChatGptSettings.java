@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ChatGptSettings implements PersistentStateComponent<ChatGptSettings> {
     private String openAiApiKey;
+    private String overrideEndpoint;
 
     public static synchronized ChatGptSettings getInstance() {
         ChatGptSettings instance = ApplicationManager.getApplication().getComponent(ChatGptSettings.class);
@@ -27,8 +28,18 @@ public class ChatGptSettings implements PersistentStateComponent<ChatGptSettings
         return openAiApiKey;
     }
 
+    public String getOverrideEndpoint() {
+        if (overrideEndpoint == null) {
+            this.overrideEndpoint = "";
+        }
+        return overrideEndpoint;
+    }
+
     public void setOpenAiApiKey(String openAiApiKey) {
         this.openAiApiKey = openAiApiKey;
+    }
+    public void setOverrideEndpoint(String overrideEndpoint) {
+        this.overrideEndpoint = overrideEndpoint;
     }
 
     /**
