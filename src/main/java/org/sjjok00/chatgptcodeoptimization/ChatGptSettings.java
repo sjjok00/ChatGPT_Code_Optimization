@@ -1,8 +1,7 @@
 package org.sjjok00.chatgptcodeoptimization;
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.*;
 import com.intellij.util.xmlb.XmlSerializer;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -11,17 +10,12 @@ import org.jetbrains.annotations.Nullable;
 @State(name = "org.sjjok00.chatgptcodeoptimization.MyPluginSettings", storages = {@Storage("code_optimization.xml")})
 
 public class ChatGptSettings implements PersistentStateComponent<ChatGptSettings> {
-    private static ChatGptSettings instance;
-
     private String openAiApiKey;
 
-    private ChatGptSettings() {
-        // 私有构造函数，防止外部实例化
-    }
-
     public static synchronized ChatGptSettings getInstance() {
+        ChatGptSettings instance = ApplicationManager.getApplication().getComponent(ChatGptSettings.class);
         if (instance == null) {
-            instance = new ChatGptSettings();
+            return new ChatGptSettings();
         }
         return instance;
     }

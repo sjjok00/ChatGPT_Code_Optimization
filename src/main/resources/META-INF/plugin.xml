@@ -31,10 +31,17 @@
                 id="org.sjjok00.chatgptcodeoptimization.ChatGptConfigurable"
         />
     </extensions>
+
     <actions>
         <action id="OptimizeCode" class="org.sjjok00.chatgptcodeoptimization.ChatGptAction" text="Optimize Code" description="Use ChatGPT to optimize selected code.">
             <add-to-group group-id="EditorLangPopupMenu" anchor="first"/>
 <!--            <keyboard-shortcut keymap="$default" first-keystroke="alt u"/>-->
         </action>
     </actions>
+    <application-components>
+        <component>
+            <implementation-class>org.sjjok00.chatgptcodeoptimization.ChatGptSettings</implementation-class>
+        </component>
+    </application-components>
+
 </idea-plugin>
