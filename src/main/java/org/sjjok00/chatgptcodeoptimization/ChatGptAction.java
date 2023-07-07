@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ChatGptAction extends AnAction {
 
-    private static final String OPENAI_API_ENDPOINT = "https://api.openai.com/v1/chat/completions";
+    public static final String OPENAI_API_ENDPOINT = "https://api.openai.com/v1/chat/completions";
 
     private static final Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 7890));
 

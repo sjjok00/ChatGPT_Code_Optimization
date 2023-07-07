@@ -30,7 +30,7 @@ public class ChatGptSettings implements PersistentStateComponent<ChatGptSettings
 
     public String getOverrideEndpoint() {
         if (overrideEndpoint == null) {
-            this.overrideEndpoint = "";
+            this.overrideEndpoint = ChatGptAction.OPENAI_API_ENDPOINT;
         }
         return overrideEndpoint;
     }
